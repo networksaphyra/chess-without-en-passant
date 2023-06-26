@@ -91,9 +91,13 @@ class Chessboard:
 
         pygame.display.update()
         while True:
-            event = pygame.event.wait()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                return
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit(1)
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    return
 
     def click_on_piece(self, screen: pygame.Surface):
         """
@@ -106,23 +110,27 @@ class Chessboard:
             str or bool: The result of the game (win/lose/draw) or False if the game is ongoing.
         """
         while True:
-            event = pygame.event.wait()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pressed_square = self.get_square_at_pixel(pygame.mouse.get_pos())
-                x, y = pressed_square
-                piece = self.board[x][y]
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit(1)
 
-                if piece and piece.piece_name[0] == self.turn:
-                    if piece.update_piece(screen, self):
-                        self.turn = 'w' if self.turn == 'b' else 'b'
-                        king = piece.get_piece(self.board, self.turn + '_king')
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pressed_square = self.get_square_at_pixel(pygame.mouse.get_pos())
+                    x, y = pressed_square
+                    piece = self.board[x][y]
 
-                        if king.is_in_check(self.board, False) and king.no_possible_legal_moves(self, self.turn):
-                            return f'{"Black" if self.turn == "w" else "White"} Wins by Checkmate'
+                    if piece and piece.piece_name[0] == self.turn:
+                        if piece.update_piece(screen, self):
+                            self.turn = 'w' if self.turn == 'b' else 'b'
+                            king = piece.get_piece(self.board, self.turn + '_king')
 
-                        if king.no_possible_legal_moves(self, self.turn):
-                            return 'Draw by Stalemate'
-                        return False
+                            if king.is_in_check(self.board, False) and king.no_possible_legal_moves(self, self.turn):
+                                return f'{"Black" if self.turn == "w" else "White"} Wins by Checkmate'
+
+                            if king.no_possible_legal_moves(self, self.turn):
+                                return 'Draw by Stalemate'
+                            return False
 
     def display_board(self, screen: pygame.Surface):
         """

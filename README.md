@@ -1,5 +1,9 @@
 # Chess: Without En Passant
 
+Full code (with assets) available on repository at:
+
+https://github.com/networksaphyra/Chess.git
+
 ## Assets Taken From:
 
 1. Chess Pieces: OpenGameArt - https://opengameart.org/content/chess-pieces-and-board-squares

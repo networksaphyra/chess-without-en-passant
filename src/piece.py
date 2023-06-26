@@ -200,6 +200,10 @@ class Piece:
         pygame.display.update()
         while True:
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit(1)
+                    
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
                     for i in range(4):

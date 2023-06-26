@@ -58,28 +58,27 @@ class Main:
         result_text_rect.midtop = (self.WIDTH // 2, self.HEIGHT // 4)
         self.screen.blit(result_text, result_text_rect)
 
-        sleep(self.config.wait_time)
+        if self.result:
+            sleep(self.config.wait_time)
         pygame.display.update()
 
         while True:
-            event = pygame.event.wait()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if play_text_rect.collidepoint(pygame.mouse.get_pos()):
-                    self.reset_game()
-                    return
-                elif quit_text_rect.collidepoint(pygame.mouse.get_pos()):
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if play_text_rect.collidepoint(pygame.mouse.get_pos()):
+                        self.reset_game()
+                        return
+                    elif quit_text_rect.collidepoint(pygame.mouse.get_pos()):
+                        pygame.quit()
+                        exit(1)
+                elif event.type == pygame.QUIT:
                     pygame.quit()
                     exit(1)
 
     def update_display(self):
         """
-        Updates the game display and handles events.
+        Updates the game display.
         """
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit(1)
-
         if not self.game_started:
             self.audio.play_game()
             self.display_menu()
@@ -101,6 +100,11 @@ class Main:
         Starts the chess game loop.
         """
         while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit(1)
+
             self.update_display()
 
 
